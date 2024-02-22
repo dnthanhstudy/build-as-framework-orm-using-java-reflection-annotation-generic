@@ -4,7 +4,6 @@ import com.laptrinhjavaweb.repository.jdbc.JdbcRepository;
 import com.laptrinhjavaweb.repository.jdbc.annotation.TableJDBC;
 import com.laptrinhjavaweb.repository.jdbc.mapper.ResultSetMapper;
 import com.laptrinhjavaweb.utils.ConnectionManager;
-import com.laptrinhjavaweb.utils.ConnectionUtils;
 
 import java.lang.reflect.ParameterizedType;
 import java.sql.Connection;
@@ -16,7 +15,7 @@ import java.util.List;
 
 public class SimpleJdbcRepository<T> implements JdbcRepository<T> {
 
-    //private static final Connection con = ConnectionManager.getInstance().getConnection();
+    private static final Connection con = ConnectionManager.getInstance().getConnection();
 
     @Override
     public List<T> findAll() {
@@ -34,10 +33,11 @@ public class SimpleJdbcRepository<T> implements JdbcRepository<T> {
         ResultSet rs = null;
 
         try {
-            stmt = ConnectionUtils.openConnection().createStatement();
+            stmt = con.createStatement();
             rs = stmt.executeQuery(sql);
 
             results =  resultSetMapper.mapRow(rs, tClass);
+            // if results is null -> added exception
             return results != null ? results : null;
         } catch (SQLException ex) {
             ex.printStackTrace();

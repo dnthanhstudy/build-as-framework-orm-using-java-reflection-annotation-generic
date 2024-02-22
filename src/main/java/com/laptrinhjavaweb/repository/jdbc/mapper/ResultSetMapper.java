@@ -31,8 +31,8 @@ public class ResultSetMapper<T> {
 
                         for(Field file : fields) {
                             if(file.isAnnotationPresent(ColumnJDBC.class)) {
-                                ColumnJDBC column = file.getAnnotation(ColumnJDBC.class);
-                                if(column.name().equals(colName)) {
+                                ColumnJDBC columnJDBC = file.getAnnotation(ColumnJDBC.class);
+                                if(columnJDBC.name().equals(colName)) {
                                     BeanUtils.setProperty(object, colName, colValue);
                                     break;
                                 }
